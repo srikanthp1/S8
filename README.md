@@ -113,3 +113,30 @@ Estimated Total Size (MB): 1.74
 
 * this may just have to do with this experiment but LN converged smootly compared to BN which has a bump at 8th epach. 
 
+## Graphs and Misclassified images 
+
+* Batch Norm(BN) loss graphs
+
+![alt text](https://github.com/srikanthp1/S8/blob/master/images/BN/accuracy_loss_graphs.png)
+
+* Layer Norm(LN) loss graphs
+
+![alt text](https://github.com/srikanthp1/S8/blob/master/images/LN/accuracy_loss_graphs.png)
+
+* Group Norm(GN) loss graphs
+
+![alt text](https://github.com/srikanthp1/S8/blob/master/images/GN/accuracy_loss_graphs.png)
+
+-------------------------------------------------------------------
+
+* Batch Norm(BN) misclassified images
+
+![alt text](https://github.com/srikanthp1/S8/blob/master/images/BN/incorrect_preds_bn.png)
+
+* Layer Norm(LN) misclassified images
+
+![alt text](https://github.com/srikanthp1/S8/blob/master/images/LN/incorrect_preds_ln.png)
+
+* Group Norm(GN) misclassified images
+
+![alt text](https://github.com/srikanthp1/S8/blob/master/images/GN/incorrect_preds_gn.png)
