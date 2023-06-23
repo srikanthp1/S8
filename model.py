@@ -10,6 +10,99 @@ from utils import GetCorrectPredCount
 
 dropout_value = 0.1
 
+class Net_res(nn.Module):
+    def __init__(self):
+        super(Net_res, self).__init__()
+
+        self.conv1 = nn.Sequential(                  #in_s, out_s, rf_in, rf_out
+            nn.Conv2d(3, 16, 3, padding=0, bias=False),           #28*28, 28*28, 1,3
+            nn.ReLU(),
+            nn.BatchNorm2d(16),
+            nn.Dropout(0.01),
+
+            nn.Conv2d(16, 20, 3, padding=0, bias=False),           #28*28, 28*28, 3,5
+            nn.ReLU(),
+            nn.BatchNorm2d(20),
+            nn.Dropout(0.01),
+
+            nn.Conv2d(20, 16, 1, bias=False),
+            nn.MaxPool2d(2, 2),
+                               #14*14, 14*14, 8,8
+
+        )
+
+        self.conv2 = nn.Sequential(
+
+            # nn.ReLU(), -->why relu. aggregators dont need relu to be appplied
+            # nn.BatchNorm2d(16),
+            # nn.Dropout(0.1),
+
+            nn.Conv2d(16, 20, 3, padding=1, bias=False),           #14*14, 14*14, 12,16
+            nn.ReLU(),
+            nn.BatchNorm2d(20),
+            nn.Dropout(0.01),
+
+            nn.Conv2d(20, 24, 3, padding=1, bias=False),           #14*14, 14*14, 12,16
+            nn.ReLU(),
+            nn.BatchNorm2d(24),
+            nn.Dropout(0.01),
+
+        )
+
+
+        self.resnetconv = nn.Sequential(
+            nn.Conv2d(24, 24, 3, padding=1, bias=False),           #14*14, 14*14, 8,12
+            nn.ReLU(),
+            nn.BatchNorm2d(24),
+            nn.Dropout(0.01),
+
+        )
+
+        self.trans2 = nn.Sequential(
+
+            nn.Conv2d(24, 16, 1, bias=False),
+            nn.MaxPool2d(2, 2),
+        )
+            # nn.ReLU(),
+
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(16, 20, 3, padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(20),
+            nn.Dropout(0.01),
+
+            nn.Conv2d(20, 24, 3, padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(24),
+            nn.Dropout(0.01),
+
+            nn.Conv2d(24, 28, 3, padding=1, bias=False),
+            nn.ReLU(),
+            nn.BatchNorm2d(28),
+            nn.Dropout(0.01),
+
+            nn.AvgPool2d(4),
+
+            nn.Conv2d(28, 10, 1, bias=False),
+
+        )
+
+
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = x + self.resnetconv(x)
+        x = self.trans2(x)
+        x = self.conv3(x)
+        # print(x.shape)
+        x = x.view(-1, 10)
+
+        # x = x.view(-1, 16*7*7)
+        # x = self.fc(x)
+        x = F.log_softmax(x, dim=1)
+        return x
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
